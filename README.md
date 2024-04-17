@@ -59,6 +59,8 @@ oauth_client.redirect_uri = EVERNOTE_OAUTH_CALLBACK
 
 @auth_routes.route('/oauth/evernote/init', methods=['GET'])
 def oauth_evernote_set_state():
+    # We shall save the value in the Referer Header for use later with the final redirect
+    session['referrer'] = request.headers.get('Referer')
     # First, we must request a temporary token that we can
     token_response = oauth_client.fetch_request_token(EVERNOTE_OAUTH_TEMP_URL)
 
@@ -93,17 +95,19 @@ def oauth_evernote_callback():
     # Fetch the Access Token (if Needed)
     access_token = oauth_client.fetch_access_token(EVERNOTE_OAUTH_TEMP_URL, oauth_verifier)
 
-    # Now we generate a new session for the newly authenticated user!!
-    # Note that depending on the way your app behaves, you may be creating a new user at this point...
-    temp_email = id_info.get('email')
+    """
+    This is where things may get tricky. As OAuth 1.0A does not have OpenID Connect functionality, there is no telling what information you will be able to obtain
+    about the user that has just logged in. This will likely be vendor specific. In the case of Evernote, you will NOT get an email!! We will demonstrate using the
+    Evernote edam_userID, but your application may handle the user in a very different way.
+    """
+    en_user_id = access_token['edam_userId']
 
-    user_exists = User.query.filter(User.email == temp_email).first()
+    user_exists = User.query.filter(User.edam_userId == en_user_id).first()
 
     if not user_exists:
         user_exists = User(
-            username=id_info.get("name"),
-            email=temp_email,
-            password='OAUTH'
+            username='anonymous',
+            edam_userId=en_user_id
         )
 
         db.session.add(user_exists)
