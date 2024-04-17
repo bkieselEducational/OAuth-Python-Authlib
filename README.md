@@ -2,11 +2,6 @@
 
 # OAuth-Python-Authlib
 
-
-[<-- BACK](https://github.com/bkieselEducational/OAuth-SDKs)
-# OAuth-2.0-Client-Library-for-Python
-
-
 ## Incorporating an OAuth 1.0A flow in your python application:
 
 ### Step 1: Register your application with the OAuth Provider and obtain an oauth_consumer_key and oauth_consumer_secret. Unlike OAuth 2.0, no need to register a redirect_uri!
