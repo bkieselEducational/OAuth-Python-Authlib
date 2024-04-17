@@ -61,10 +61,9 @@ oauth_client.redirect_uri = EVERNOTE_OAUTH_CALLBACK
 def oauth_evernote_set_state():
     # First, we must request a temporary token that we can
     token_response = oauth_client.fetch_request_token(EVERNOTE_OAUTH_TEMP_URL)
-    print("TOKEN RESPONSE: ", token_response)
 
     if token_response['oauth_callback_confirmed'] != 'true':
-        return { 'errors': { 'http': { 'code': 400, 'name': 'Bad Request', 'description': f'Evernote cannot verify the callback URI' } } }, 400
+        return { 'errors': { 'http': { 'code': 400, 'name': 'Bad Request', 'description': 'Evernote cannot verify the callback URI' } } }, 400
 
     # We must save the token and token_secret in the client so that we can access these values in the callback!
     oauth_client.token = token_response
@@ -89,7 +88,7 @@ def oauth_evernote_callback():
     oauth_verifier = request.args.get('oauth_verifier')
 
     if oauth_verifier == None:
-        return { 'errors': { 'http': { 'code': 401, 'name': 'Bad Request', 'description': f'Evernote user authorization failed' } } }, 401
+        return { 'errors': { 'http': { 'code': 400, 'name': 'Bad Request', 'description': 'Evernote user authorization failed' } } }, 400
 
     # Fetch the Access Token (if Needed)
     access_token = oauth_client.fetch_access_token(EVERNOTE_OAUTH_TEMP_URL, oauth_verifier)
