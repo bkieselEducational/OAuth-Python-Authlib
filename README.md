@@ -106,7 +106,7 @@ def oauth_evernote_callback():
 
     if not user_exists:
         user_exists = User(
-            username=f'anonymous-{en_user_id}',
+            username=f"anonymous-{en_user_id}",
             edam_userId=en_user_id
         )
 
