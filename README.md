@@ -1,6 +1,6 @@
 [<-- BACK](https://github.com/bkieselEducational/OAuth-SDKs)
 
-# OAuth-Python-Authlib
+# OAuth Python Authlib
 
 ## Incorporating an OAuth 1.0A flow in your python application:
 
